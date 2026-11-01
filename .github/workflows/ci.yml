@@ -1,0 +1,87 @@
+name: ci
+
+on:
+  push: { branches: [main] }
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  api:
+    name: API (lint, types, unit, e2e against Postgres)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env: { POSTGRES_PASSWORD: postgres, POSTGRES_DB: app }
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 3s --health-retries 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check
+      - run: pnpm build
+      - name: End-to-end tests (real Postgres, row-level security, concurrency)
+        run: pnpm test:e2e
+        env:
+          TEST_DATABASE_URL: postgres://postgres:postgres@localhost:5432/app
+
+  web:
+    name: Web (lint, types, tests, build)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults: { run: { working-directory: web } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { package_json_file: web/package.json }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm, cache-dependency-path: web/pnpm-lock.yaml }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check
+      - run: pnpm build
+
+  stack:
+    name: Stack (docker compose + black-box smoke test)
+    needs: [api, web]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - run: make env
+      - run: docker compose up -d --build --wait
+      - run: ./scripts/smoke.sh http://localhost:8080
+      - name: Logs on failure
+        if: failure()
+        run: docker compose logs --no-color --tail=200
+      - run: docker compose down -v
+
+  security:
+    name: Security (secrets, Dockerfiles, dependencies)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Secret scan (full history)
+        uses: gitleaks/gitleaks-action@v2
+        env: { GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}' }
+      - name: Lint Dockerfiles
+        uses: hadolint/hadolint-action@v3.1.0
+        with: { dockerfile: Dockerfile, failure-threshold: warning }
+      - name: Lint web Dockerfile
+        uses: hadolint/hadolint-action@v3.1.0
+        with: { dockerfile: web/Dockerfile, failure-threshold: warning }
+      - uses: pnpm/action-setup@v4
+      - name: Audit production dependencies
+        run: pnpm audit --prod --audit-level high

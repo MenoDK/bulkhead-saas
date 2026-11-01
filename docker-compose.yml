@@ -1,0 +1,72 @@
+# Production-shaped stack on one machine:  db -> migrate (one-shot) -> api + worker -> web (nginx, the only published port)
+
+x-api: &api
+  build: { context: ., target: runtime }
+  image: multitenant-api:local
+  env_file: .env
+  environment: &api-env
+    NODE_ENV: production
+    DATABASE_URL: postgres://app_user:${APP_DB_PASSWORD:?run "make env" first}@db:5432/app
+    MIGRATION_DATABASE_URL: postgres://postgres:${POSTGRES_PASSWORD:?run "make env" first}@db:5432/app
+    AUTO_MIGRATE: 'false' # migrations run once, in the `migrate` service, never racing across replicas
+    TRUST_PROXY_HOPS: '1' # exactly one proxy (nginx) in front
+  init: true
+  read_only: true
+  tmpfs: [/tmp]
+  cap_drop: [ALL]
+  security_opt: ['no-new-privileges:true']
+  restart: unless-stopped
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?run "make env" first}
+      POSTGRES_DB: app
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d app']
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  migrate:
+    <<: *api
+    command: ['node', 'dist/database/migrate-cli.js']
+    restart: 'no'
+    depends_on:
+      db: { condition: service_healthy }
+
+  api:
+    <<: *api
+    environment:
+      <<: *api-env
+      OUTBOX_WORKER: 'false' # delivery runs in its own process so API replicas stay request-only
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+
+  worker:
+    <<: *api
+    command: ['node', 'dist/worker.js']
+    healthcheck: { disable: true }
+    environment:
+      <<: *api-env
+      OUTBOX_WORKER: 'true'
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+
+  web:
+    build: { context: ./web, target: runtime }
+    image: multitenant-web:local
+    ports: ['${WEB_PORT:-8080}:8080']
+    read_only: true
+    tmpfs: [/tmp, /var/cache/nginx, /var/run]
+    cap_drop: [ALL]
+    security_opt: ['no-new-privileges:true']
+    depends_on:
+      api: { condition: service_healthy }
+    restart: unless-stopped
+
+volumes:
+  pgdata:

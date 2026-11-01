@@ -1,0 +1,9 @@
+# Documentation guards: https://github.com/MenoDK/docsguard (docsguard). Run: docsguard check
+
+[budget]
+max_session_tokens = 3000
+
+# Paths a session may read but not write (added to the built-in secrets, keys and .git defaults).
+[[scope.protected]]
+pattern = "db/migrations/**"
+reason = "an applied migration is immutable: schema changes are a new, numbered migration reviewed by a human"

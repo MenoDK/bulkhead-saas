@@ -14,7 +14,9 @@ retries, concurrency, money, token theft) are real and tested against a real Pos
 - `src/modules/<name>/`: one folder per capability (identity, tenancy, resources, billing, outbox, webhooks, audit, idempotency, realtime).
 - `db/migrations/`: numbered SQL, applied by `src/database/migrator.ts`, which also re-asserts the runtime role's attributes.
 - `test/*.e2e-spec.ts`: real Postgres. `scripts/sabotage.sh`: breaks 7 invariants and requires the tests to go red.
-- `web/`: React 19 + Vite SPA, five niche themes, its own tests (vitest, Playwright + axe).
+- `web/`: React 19 + Vite console (served at `/app/`), five niche themes, its own tests (vitest, Playwright + axe).
+- `site/`: the landing page and the lab, plain files with no build step, in 14 languages (`site/i18n/`). The answers printed on
+  the landing page are recorded from the running stack (`make transcripts`); never edit `site/transcripts.js` by hand.
 
 ## Rules that apply to every task
 
@@ -26,6 +28,7 @@ retries, concurrency, money, token theft) are real and tested against a real Pos
 4. **Assert the specific error code, not only the status.** A `CHECK` constraint also answers 422.
 5. **No literal credentials.** Secrets come from the environment at run time; `.env` is git-ignored; tests build theirs.
 6. **Docs are code.** A new document is added to the map in the same commit; `docsguard check` must pass.
+7. **Browser tests need the e2e override** (`make up-e2e`), which lifts the per-address rate limits a test run would otherwise exhaust.
 
 Advice versus enforcement: this file is advice. If `docsguard` is installed, `.claude/settings.json` turns the key
 rules into hooks (destructive git, writes to secrets and to applied migrations are refused).

@@ -1,13 +1,13 @@
 # Read first: bulkhead-saas
 
 This file is a **map, not content**. Open a document only when its row says to; that is what keeps a fresh session
-cheap. Updated: 2026-11-01
+cheap. Updated: 2026-11-04
 
 | Open when you…                                     | Document                                                                                    |
 | -------------------------------------------------- | ------------------------------------------------------------------------------------------- |
 | start or resume a session                          | [HANDOFF](HANDOFF.md): where we stopped, what not to do                                     |
 | need to know what is done and what is not          | [CHECKLIST](CHECKLIST.md)                                                                   |
-| ask "why is it built this way?"                    | [Decision records](adr/README.md) <!-- docsguard:count dir=docs/adr glob=0*.md expect=8 --> |
+| ask "why is it built this way?"                    | [Decision records](adr/README.md) <!-- docsguard:count dir=docs/adr glob=0*.md expect=9 --> |
 | want the architecture, API table and how to run it | the repository [README](../README.md)                                                       |
 
 ## Rules of the map

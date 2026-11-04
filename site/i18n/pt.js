@@ -85,7 +85,7 @@
     text: 'Há poucas tabelas de dados de negócio de propósito. Tudo o que importa em produção é real, e as decisões por trás estão escritas com as alternativas que perderam.',
     stackTitle: 'Com o que é feito',
     proofTitle: 'O que é medido, e os registros por trás',
-    numbers: [[null, 'testes de API, 87 deles contra um PostgreSQL real'], [null, 'testes do console, mais uma suíte de navegador com varreduras axe'], [null, 'mutantes dos invariantes, todos mortos por um teste'], [null, 'registros de decisão, cada um com alternativas descartadas']],
+    numbers: [[null, 'testes de API, 88 deles contra um PostgreSQL real'], [null, 'testes do console, mais uma suíte de navegador com varreduras axe'], [null, 'mutantes dos invariantes, todos mortos por um teste'], [null, 'registros de decisão, cada um com alternativas descartadas']],
     decisions: [
       ['Isolamento no banco de dados', 'ADR 0001: por que segurança em nível de linha e não só um where em cada consulta.'],
       ['Chaves de idempotência são confirmadas com o trabalho', 'ADR 0003: por que a chave vive na mesma transação do pagamento.'],

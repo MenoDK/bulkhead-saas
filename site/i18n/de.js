@@ -85,7 +85,7 @@
     text: 'Es gibt absichtlich nur wenige Tabellen mit Geschäftsdaten. Alles, was in Produktion zählt, ist echt, und die Entscheidungen dahinter sind mit den unterlegenen Alternativen aufgeschrieben.',
     stackTitle: 'Woraus es gebaut ist',
     proofTitle: 'Was gemessen wird, und die Unterlagen dahinter',
-    numbers: [[null, 'API-Tests, 87 davon gegen ein echtes PostgreSQL'], [null, 'Konsolen-Tests, dazu eine Browser-Suite mit axe-Scans'], [null, 'Mutanten der Invarianten, alle von einem Test getötet'], [null, 'Entscheidungsdokumente, jedes mit verworfenen Alternativen']],
+    numbers: [[null, 'API-Tests, 88 davon gegen ein echtes PostgreSQL'], [null, 'Konsolen-Tests, dazu eine Browser-Suite mit axe-Scans'], [null, 'Mutanten der Invarianten, alle von einem Test getötet'], [null, 'Entscheidungsdokumente, jedes mit verworfenen Alternativen']],
     decisions: [
       ['Isolation in der Datenbank', 'ADR 0001: warum Sicherheit auf Zeilenebene und nicht nur ein where in jeder Abfrage.'],
       ['Idempotenzschlüssel werden mit der Arbeit festgeschrieben', 'ADR 0003: warum der Schlüssel in derselben Transaktion wie die Zahlung lebt.'],

@@ -85,7 +85,7 @@
     text: 'Sengaja hanya ada sedikit tabel data bisnis. Semua yang penting di produksi itu nyata, dan keputusan di baliknya ditulis bersama alternatif yang kalah.',
     stackTitle: 'Dibangun dengan apa',
     proofTitle: 'Apa yang diukur, dan catatan di baliknya',
-    numbers: [[null, 'tes API, 87 di antaranya terhadap PostgreSQL nyata'], [null, 'tes konsol, ditambah suite browser dengan pemindaian axe'], [null, 'mutan invarian, semuanya dibunuh oleh sebuah tes'], [null, 'catatan keputusan, masing-masing dengan alternatif yang ditolak']],
+    numbers: [[null, 'tes API, 88 di antaranya terhadap PostgreSQL nyata'], [null, 'tes konsol, ditambah suite browser dengan pemindaian axe'], [null, 'mutan invarian, semuanya dibunuh oleh sebuah tes'], [null, 'catatan keputusan, masing-masing dengan alternatif yang ditolak']],
     decisions: [
       ['Isolasi di basis data', 'ADR 0001: mengapa keamanan tingkat baris dan bukan sekadar where di setiap kueri.'],
       ['Kunci idempotensi di-commit bersama pekerjaan', 'ADR 0003: mengapa kunci hidup dalam transaksi yang sama dengan pembayaran.'],

@@ -85,7 +85,7 @@
     text: 'Il n’y a volontairement que quelques tables de données métier. Tout ce qui compte en production est réel, et les décisions qui la sous-tendent sont écrites avec les alternatives écartées.',
     stackTitle: 'De quoi il est fait',
     proofTitle: 'Ce qui est mesuré, et les documents qui le soutiennent',
-    numbers: [[null, 'tests d’API, dont 87 contre un vrai PostgreSQL'], [null, 'tests de la console, plus une suite navigateur avec analyses axe'], [null, 'mutants des invariants, tous tués par un test'], [null, 'documents de décision, chacun avec ses alternatives écartées']],
+    numbers: [[null, 'tests d’API, dont 88 contre un vrai PostgreSQL'], [null, 'tests de la console, plus une suite navigateur avec analyses axe'], [null, 'mutants des invariants, tous tués par un test'], [null, 'documents de décision, chacun avec ses alternatives écartées']],
     decisions: [
       ['Isolation dans la base de données', 'ADR 0001 : pourquoi la sécurité au niveau des lignes et pas seulement un where dans chaque requête.'],
       ['Les clés d’idempotence sont validées avec le travail', 'ADR 0003 : pourquoi la clé vit dans la même transaction que le paiement.'],

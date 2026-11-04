@@ -307,7 +307,7 @@ window.SITE = {
     ],
     proofTitle: 'What is measured, and the records behind it',
     numbers: [
-      ['214', 'API tests, 87 of them against a real PostgreSQL'],
+      ['215', 'API tests, 88 of them against a real PostgreSQL'],
       ['209', 'console tests, plus a browser suite with axe scans'],
       ['7', 'mutants of the invariants, all killed by a test'],
       ['9', 'decision records, each with rejected alternatives'],

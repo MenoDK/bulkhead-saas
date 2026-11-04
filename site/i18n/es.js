@@ -85,7 +85,7 @@
     text: 'Hay pocas tablas de datos de negocio a propósito. Todo lo que importa en producción es real, y las decisiones detrás están escritas con las alternativas que perdieron.',
     stackTitle: 'Con qué está construido',
     proofTitle: 'Qué se mide, y los registros que lo respaldan',
-    numbers: [[null, 'pruebas de API, 87 de ellas contra un PostgreSQL real'], [null, 'pruebas de la consola, más una suite de navegador con escaneos axe'], [null, 'mutantes de los invariantes, todos eliminados por una prueba'], [null, 'registros de decisión, cada uno con alternativas descartadas']],
+    numbers: [[null, 'pruebas de API, 88 de ellas contra un PostgreSQL real'], [null, 'pruebas de la consola, más una suite de navegador con escaneos axe'], [null, 'mutantes de los invariantes, todos eliminados por una prueba'], [null, 'registros de decisión, cada uno con alternativas descartadas']],
     decisions: [
       ['Aislamiento en la base de datos', 'ADR 0001: por qué seguridad a nivel de fila y no solo un where en cada consulta.'],
       ['Las claves de idempotencia se confirman con el trabajo', 'ADR 0003: por qué la clave vive en la misma transacción que el pago.'],

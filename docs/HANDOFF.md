@@ -49,11 +49,13 @@ None.
 - Two sentences on the landing page described answers the stack does not give. Recording the real output (`make transcripts`) found them; the page now prints what was recorded.
 - The lab made its second workspace asynchronously, and a quick click on "Read it as B" went out with no token and answered `401`. Retaking a screenshot found it; the lab now waits for the workspace, a test forces the race, and that test was seen to fail before the fix.
 - The Docker image for the web tier was built before the translations existed and answered 404 for them. After touching `site/`, rebuild with `make up-e2e` before trusting a browser run.
+- The first run on GitHub found what the local machine hid. `docker compose up --wait` on the runner refuses a service with no health check, and the worker had none (it has no HTTP port). It now rewrites a heartbeat file after every poll that succeeded and the health check reads its age; a test proves the file is written and renewed, and fails when the write is removed.
+- `pnpm audit` reported a high-severity advisory in `multer` 2.4.0, a transitive dependency of `@nestjs/platform-express` that this code never uses. `package.json` pins `multer` to 2.5.0 through `pnpm.overrides`; remove the override when a release of `@nestjs/platform-express` depends on `multer` 2.5.0 or later.
 - The unit tests of the console had never been checked for formatting in CI, and one file was not formatted; `make check` is now the single gate.
 
 ## 8. Suite state
 
-Measured on 2026-11-04: 127 API unit tests, 87 API end-to-end tests against Postgres, 209 web unit tests, 80 browser tests
+Measured on 2026-11-04: 127 API unit tests, 88 API end-to-end tests against Postgres, 209 web unit tests, 80 browser tests
 (desktop and phone: landing page, lab, 14 languages, sign-up per niche, axe WCAG 2.1 AA; 13 more are screenshot jobs that run only with `make screenshots`),
 the recorded-transcript check, the tamper demo (the edit is detected), the smoke test (10 steps) and 7 of 7 mutants killed. `hadolint` is clean on both
 Dockerfiles at the warning level and `actionlint` is clean on the workflow.

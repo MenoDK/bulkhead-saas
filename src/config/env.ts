@@ -58,6 +58,8 @@ export const envSchema = z.object({
 
   OUTBOX_WORKER: bool.default(true),
   OUTBOX_POLL_INTERVAL_MS: z.coerce.number().int().min(50).default(1000),
+  /** When set, the worker rewrites this file after every poll that succeeded; the container health check reads its age. */
+  WORKER_HEARTBEAT_FILE: z.string().min(1).optional(),
   OUTBOX_BATCH_SIZE: z.coerce.number().int().min(1).max(500).default(25),
   OUTBOX_LEASE_SECONDS: z.coerce.number().int().min(5).default(60),
   OUTBOX_MAX_ATTEMPTS: z.coerce.number().int().min(1).max(50).default(8),

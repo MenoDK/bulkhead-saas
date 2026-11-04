@@ -49,10 +49,21 @@ services:
   worker:
     <<: *api
     command: ['node', 'dist/worker.js']
-    healthcheck: { disable: true }
+    # No HTTP port: healthy means "the last poll of the database succeeded less than a minute ago" (see OutboxWorker.beat).
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "const age = Date.now() - require('fs').statSync('/tmp/worker-heartbeat').mtimeMs; if (age > 60000) process.exit(1)"
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
     environment:
       <<: *api-env
       OUTBOX_WORKER: 'true'
+      WORKER_HEARTBEAT_FILE: /tmp/worker-heartbeat
     depends_on:
       migrate: { condition: service_completed_successfully }
 

@@ -7,7 +7,7 @@
 [![CI](https://github.com/MenoDK/bulkhead-saas/actions/workflows/ci.yml/badge.svg)](https://github.com/MenoDK/bulkhead-saas/actions/workflows/ci.yml)
 ![Node](https://img.shields.io/badge/node-22-339933)
 ![Typing](https://img.shields.io/badge/tsc-strict-success)
-![Tests](https://img.shields.io/badge/tests-214%20API%20on%20real%20PostgreSQL%20·%20209%20web%20·%2080%20browser%20·%207%20mutants%20caught-success)
+![Tests](https://img.shields.io/badge/tests-215%20API%20on%20real%20PostgreSQL%20·%20209%20web%20·%2080%20browser%20·%207%20mutants%20caught-success)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey)
 
 ![The landing page](docs/img/landing.png)
@@ -208,13 +208,13 @@ Events delivered to tenant endpoints: `resource.created|updated|deleted`, `invoi
 
 Measured on this machine, not estimated.
 
-| Service   | Image                      | Size   | Published | Notes                                                                                           |
-| --------- | -------------------------- | ------ | --------- | ----------------------------------------------------------------------------------------------- |
-| `db`      | `postgres:16-alpine`       | —      | no        | volume `pgdata`                                                                                 |
-| `migrate` | API image                  | 290 MB | no        | one-shot, owner role, exits 0                                                                   |
-| `api`     | `node:22-alpine`, non-root | 290 MB | no        | read-only root fs, all capabilities dropped                                                     |
-| `worker`  | same image                 | —      | no        | `node dist/worker.js`; scale it independently                                                   |
-| `web`     | nginx-unprivileged         | 79 MB  | `:8080`   | landing, lab and console; the console is ≈ 121 kB gzip JS and its admin screens are lazy-loaded |
+| Service   | Image                      | Size   | Published | Notes                                                                                                                       |
+| --------- | -------------------------- | ------ | --------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `db`      | `postgres:16-alpine`       | —      | no        | volume `pgdata`                                                                                                             |
+| `migrate` | API image                  | 290 MB | no        | one-shot, owner role, exits 0                                                                                               |
+| `api`     | `node:22-alpine`, non-root | 290 MB | no        | read-only root fs, all capabilities dropped                                                                                 |
+| `worker`  | same image                 | —      | no        | `node dist/worker.js`; scale it independently; healthy means its last poll of the database succeeded less than a minute ago |
+| `web`     | nginx-unprivileged         | 79 MB  | `:8080`   | landing, lab and console; the console is ≈ 121 kB gzip JS and its admin screens are lazy-loaded                             |
 
 Memory at idle, from `docker stats`: web 13 MiB, worker 34 MiB, api 48 MiB, db 27 MiB (about 122 MiB in total).
 
@@ -227,7 +227,7 @@ Validated at start-up (zod): a missing or malformed value stops the process with
 | Layer                  | Command                                       | What it covers                                                                                    |
 | ---------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------- |
 | API unit               | `pnpm test`                                   | 127 tests of pure logic: money, hash chain, signatures, SSRF ranges, backoff, ciphers             |
-| API end-to-end         | `TEST_DATABASE_URL=… pnpm test:e2e`           | 87 tests on a real Postgres: isolation, concurrency, outbox, webhooks, realtime                   |
+| API end-to-end         | `TEST_DATABASE_URL=… pnpm test:e2e`           | 88 tests on a real Postgres: isolation, concurrency, outbox, webhooks, realtime                   |
 | Web unit + integration | `cd web && pnpm test`                         | 209 tests: API client (single-flight refresh), money, theme tokens, pages with a fake API         |
 | Browser end-to-end     | `make e2e-browser`                            | 80 tests (Playwright + axe, desktop and phone): landing, lab, all 14 languages, sign-up per niche |
 | Recorded transcripts   | `node scripts/record-transcripts.mjs --check` | the answers printed on the landing page still match what the stack says                           |

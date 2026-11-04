@@ -1,3 +1,4 @@
+import { writeFile } from 'node:fs/promises';
 import {
   Inject,
   Injectable,
@@ -76,10 +77,20 @@ export class OutboxWorker implements OnApplicationBootstrap, OnApplicationShutdo
     if (this.stopped) return;
     this.timer = setTimeout(() => {
       void this.tick()
+        .then(() => this.beat())
         .catch((e: unknown) => this.logger.error(`tick failed: ${String(e)}`))
         .finally(() => this.schedule());
     }, this.env.OUTBOX_POLL_INTERVAL_MS);
     this.timer.unref();
+  }
+
+  /**
+   * Proof of life for the container health check: the file is rewritten after every poll that *succeeded*, so a worker
+   * whose database is unreachable (the poll throws) goes stale and is reported unhealthy, instead of looking fine
+   * because the process is merely running.
+   */
+  private async beat(): Promise<void> {
+    if (this.env.WORKER_HEARTBEAT_FILE) await writeFile(this.env.WORKER_HEARTBEAT_FILE, String(Date.now()));
   }
 
   async tick(): Promise<TickResult> {

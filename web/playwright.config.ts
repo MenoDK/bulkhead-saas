@@ -4,6 +4,9 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   testDir: 'e2e',
   testMatch: '**/*.e2e.ts',
+  // The accessibility sweep visits twelve screens (six pages, light and dark) and takes about half a minute by design.
+  timeout: 60_000,
+  expect: { timeout: 10_000 },
   fullyParallel: false,
   workers: 1,
   retries: 0,
@@ -15,6 +18,12 @@ export default defineConfig({
   },
   projects: [
     { name: 'desktop', use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 } } },
-    { name: 'mobile', use: { ...devices['Pixel 7'] } },
+    // The phone project covers the console. The landing page, the lab and the languages are checked on the desktop
+    // project only; they open their own phone-sized contexts where it matters.
+    {
+      name: 'mobile',
+      use: { ...devices['Pixel 7'] },
+      testIgnore: ['**/landing.e2e.ts', '**/lab.e2e.ts', '**/i18n.e2e.ts', '**/shots.e2e.ts'],
+    },
   ],
 });

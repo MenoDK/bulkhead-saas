@@ -1,0 +1,8 @@
+# Layered over docker-compose.yml by the browser tests only (`make up-e2e`). They register dozens of workspaces from one
+# address, which the real limits (20 sign-ups and 100 requests to /auth per 15 minutes per address) would refuse.
+# Everything else about the stack is identical, and a visitor's `make up` never reads this file.
+services:
+  api:
+    environment:
+      REGISTER_IP_LIMIT: '1000'
+      AUTH_IP_LIMIT: '1000'

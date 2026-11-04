@@ -30,7 +30,7 @@ createRoot(root).render(
       <QueryClientProvider client={queryClient}>
         <ApiProvider client={api}>
           <ToastProvider>
-            <BrowserRouter>
+            <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '')}>
               <App />
             </BrowserRouter>
           </ToastProvider>

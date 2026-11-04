@@ -84,7 +84,7 @@ export function AuthPage() {
           <span className="dot" aria-hidden="true">
             {theme.label.charAt(0)}
           </span>
-          <span>Multitenant Console</span>
+          <span>Bulkhead Console</span>
         </div>
         <h1>{theme.tagline}</h1>
         <p>

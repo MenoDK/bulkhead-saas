@@ -2,7 +2,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 import { horizontalOverflow, NICHES, signUp } from './helpers';
 
-const PAGES = ['/', '/resources', '/invoices', '/team', '/audit', '/webhooks'];
+const PAGES = ['/app/', '/app/resources', '/app/invoices', '/app/team', '/app/audit', '/app/webhooks'];
 
 for (const niche of NICHES) {
   test(`${niche.id}: sign-up applies the niche theme and vocabulary`, async ({ page }) => {
@@ -42,7 +42,7 @@ for (const niche of NICHES) {
 }
 
 test('the sign-in page itself is accessible and does not scroll sideways', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/app/');
   await expect(page.getByRole('heading', { name: 'Welcome back' })).toBeVisible();
   expect(await horizontalOverflow(page)).toBeLessThanOrEqual(0);
   const { violations } = await new AxeBuilder({ page })
@@ -54,7 +54,7 @@ test('the sign-in page itself is accessible and does not scroll sideways', async
 });
 
 test('keyboard only: the whole sign-in form can be completed without a mouse', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/app/');
   await page.getByLabel('E-mail').focus();
   await page.keyboard.type('nobody@example.test');
   await page.keyboard.press('Tab');

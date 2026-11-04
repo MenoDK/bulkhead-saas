@@ -29,4 +29,14 @@ export default tseslint.config(
     files: ['src/database/migrate-cli.ts'],
     rules: { 'no-console': 'off' },
   },
+  {
+    // The landing page and the lab are plain browser scripts with no build step. The browser tests exercise them.
+    files: ['site/**/*.js'],
+    languageOptions: { sourceType: 'script', globals: { ...globals.browser } },
+  },
+  {
+    // Command-line tools print to the terminal on purpose.
+    files: ['scripts/**/*.mjs'],
+    rules: { 'no-console': 'off' },
+  },
 );

@@ -1,5 +1,5 @@
 {
-  "name": "nestjs-multitenant-platform",
+  "name": "bulkhead-saas",
   "version": "0.1.0",
   "description": "Reference multi-tenant API: Postgres RLS, object-level authorization, hash-chained audit, idempotency, transactional outbox, signed webhooks.",
   "license": "MIT",

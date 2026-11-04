@@ -5,6 +5,8 @@ const api = process.env.VITE_DEV_API ?? 'http://localhost:3000';
 
 export default defineConfig({
   plugins: [react()],
+  // The landing page and the lab own `/`; the console is served under /app/ (see web/nginx.conf).
+  base: '/app/',
   server: {
     port: 5173,
     // Same-origin in dev too: the SPA never needs CORS, exactly like behind the production nginx.

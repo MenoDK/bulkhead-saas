@@ -139,7 +139,7 @@ export class OutboxWorker implements OnApplicationBootstrap, OnApplicationShutdo
           'x-event-id': event.id,
           'x-event-topic': event.topic,
           'x-signature': buildSignatureHeader(this.box.open(endpoint.secret), body),
-          'user-agent': 'multitenant-platform-webhooks/1',
+          'user-agent': 'bulkhead-webhooks/1',
         },
         {
           timeoutMs: this.env.OUTBOX_DELIVERY_TIMEOUT_MS,

@@ -18,7 +18,9 @@ function renderPage(client: Partial<ApiClient>) {
 
 describe('validateAuth', () => {
   it('login only needs a well-formed e-mail and some password', () => {
-    expect(validateAuth('login', { email: 'a@example.test', password: 'x', name: '', tenantName: '' })).toEqual({});
+    expect(
+      validateAuth('login', { email: 'a@example.test', password: 'x', name: '', tenantName: '' }),
+    ).toEqual({});
     expect(
       Object.keys(validateAuth('login', { email: 'nope', password: '', name: '', tenantName: '' })),
     ).toEqual(['email', 'password']);

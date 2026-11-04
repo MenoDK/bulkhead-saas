@@ -2,7 +2,7 @@
 
 x-api: &api
   build: { context: ., target: runtime }
-  image: multitenant-api:local
+  image: bulkhead-api:local
   env_file: .env
   environment: &api-env
     NODE_ENV: production
@@ -57,8 +57,8 @@ services:
       migrate: { condition: service_completed_successfully }
 
   web:
-    build: { context: ./web, target: runtime }
-    image: multitenant-web:local
+    build: { context: ., dockerfile: web/Dockerfile, target: runtime }
+    image: bulkhead-web:local
     ports: ['${WEB_PORT:-8080}:8080']
     read_only: true
     tmpfs: [/tmp, /var/cache/nginx, /var/run]

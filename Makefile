@@ -3,10 +3,12 @@
 help: ## list targets
 	@grep -E '^[a-z-]+:.*##' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-12s %s\n", $$1, $$2}'
 
+# One recipe line on purpose: `exit 0` in a separate line only ends that line, and make would carry on to overwrite .env,
+# which breaks a second `make up` because the database volume keeps the password of the first one.
 env: ## create .env with fresh random secrets (never overwrites an existing file)
-	@test ! -f .env || { echo ".env already exists; leaving it alone"; exit 0; }
-	@cp .env.example .env
-	@owner=$$(openssl rand -hex 16); app=$$(openssl rand -hex 16); \
+	@if [ -f .env ]; then echo ".env already exists; leaving it alone"; else \
+	 cp .env.example .env; \
+	 owner=$$(openssl rand -hex 16); app=$$(openssl rand -hex 16); \
 	 sed -i \
 	  -e "s|^POSTGRES_PASSWORD=.*|POSTGRES_PASSWORD=$$owner|" \
 	  -e "s|^APP_DB_PASSWORD=.*|APP_DB_PASSWORD=$$app|" \
@@ -16,9 +18,9 @@ env: ## create .env with fresh random secrets (never overwrites an existing file
 	  -e "s|^SECRETS_ENCRYPTION_KEY=.*|SECRETS_ENCRYPTION_KEY=$$(openssl rand -hex 32)|" \
 	  -e "s|^AUDIT_EXPORT_SECRET=.*|AUDIT_EXPORT_SECRET=$$(openssl rand -hex 32)|" \
 	  -e "s|^PAYMENT_WEBHOOK_SECRETS=.*|PAYMENT_WEBHOOK_SECRETS=$$(openssl rand -hex 24)|" \
-	  -e "s|^METRICS_TOKEN=.*|METRICS_TOKEN=$$(openssl rand -hex 16)|" .env
-	@chmod 600 .env
-	@echo "wrote .env (mode 600) with new random secrets"
+	  -e "s|^METRICS_TOKEN=.*|METRICS_TOKEN=$$(openssl rand -hex 16)|" .env; \
+	 chmod 600 .env; \
+	 echo "wrote .env (mode 600) with new random secrets"; fi
 
 api-check: ## lint + typecheck + format + unit tests (backend)
 	pnpm check

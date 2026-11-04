@@ -12,13 +12,13 @@ Nothing is deployed. The compose stack runs locally: `web` on :8080 serves the l
 ## 2. Where we stopped
 
 Features, tests, delivery files, the landing page, the lab, 14 languages and the documentation are complete and verified locally (section 8).
-The repository was pushed as a **private** repository. What is left is to read the first CI run on GitHub and to decide about making it public.
+The repository was pushed as a **private** repository and its CI is green on GitHub (five jobs: API, Web, Security, Browser, Stack). What is left is
+the translation review and the decision about making it public.
 
 ## 3. What the owner does now
 
-1. Read the first run of `.github/workflows/ci.yml`. It was linted with actionlint and every step was run locally, but it could not run on GitHub before the push.
-2. Have native speakers review the thirteen translations in `site/i18n/` (they were written for this project; Hindi, Bengali, Urdu and Arabic most of all).
-3. Decide whether to make the repository public.
+1. Have native speakers review the thirteen translations in `site/i18n/` (they were written for this project; Hindi, Bengali, Urdu and Arabic most of all).
+2. Decide whether to make the repository public.
 
 ## 4. Deadlines
 
